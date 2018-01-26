@@ -1,26 +1,34 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Navbar, Nav, NavItem } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import {Navbar,Nav,NavItem,} from "react-bootstrap";
+// import { Link } from "react-router-dom";
 
 const TopNavbar = (props) => {
-  let navItems = "";
-  if (props.showNavItems) {
-    navItems = (
-              <div>
-                <Nav pullRight>
-                  <Link to="/secret"><Navbar.Text>Secret</Navbar.Text></Link>
-                </Nav>
-              </div>
-              );
 
+  let navItems = "";
+
+  if (props.showNavItems) {
+    // If signed in (authenticated), show Welcome
+    navItems = (
+                <Nav pullRight>
+                  <NavItem onClick={props.onSignOut}>Sign Out</NavItem>
+                </Nav>
+              );
+  } else {
+    // If NOT signed in (authenticated), show Sign In
+    navItems = (
+        <Nav pullRight>
+          <NavItem onClick={props.signInClicked}>Sign Up / Sign In</NavItem>
+        </Nav>
+    )
   }
+
   return (
     <Navbar inverse collapseOnSelect>
+      <Navbar.Header>
+        <Navbar.Toggle />
+      </Navbar.Header>
       <Navbar.Collapse>
-        <Nav pullRight>
-          <NavItem onClick={props.onSignOut}>Sign Out</NavItem>
-        </Nav>
         {navItems}
       </Navbar.Collapse>
     </Navbar>
@@ -29,7 +37,9 @@ const TopNavbar = (props) => {
 
 TopNavbar.propTypes = {
   onSignOut: PropTypes.func.isRequired,
-  showNavItems: PropTypes.bool.isRequired
+  // showNavItems: PropTypes.bool.isRequired,
+  signInClicked:PropTypes.func.isRequired
 };
 
 export default TopNavbar;
+// navbar-fixed-top

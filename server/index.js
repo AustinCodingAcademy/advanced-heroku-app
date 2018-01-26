@@ -8,20 +8,25 @@ import passport from "passport";
 import authenticationRoutes from "./routes/AuthenticationRoutes";
 import listRoutes from "./routes/ListRoutes";
 import articleRoutes from "./routes/blog/ArticleRoutes";
+import couponRoutes from "./routes/CouponRoutes";
+var cors = require('cors');
+
 
 mongoose.set("debug", true);
 mongoose.Promise = global.Promise;
-mongoose.connect("mongodb://jwoo:jwoo@ds151451.mlab.com:51451/aca-test");
+// mongoose.connect("mongodb://jwoo:jwoo@ds151451.mlab.com:51451/aca-test");
+// mongoose.connect("mongodb://localhost/bogobyzip");
+mongoose.connect("mongodb://gdevany:gdevany@ds133964.mlab.com:33964/bogobyzip");
 
 const app = express();
 app.use(express.static("public"));
+app.use(cors());
+app.options('*', cors());
 
-app.get("*", (req, res, next) => {
-  res.sendFile("public/index.html");
-});
 app.use(bodyParser.json());
-app.use(authenticationRoutes);
 
+app.use(authenticationRoutes);
+app.use(couponRoutes);
 
 const authStrategy = passport.authenticate("authStrategy", { session: false });
 app.use(authStrategy);
@@ -37,4 +42,3 @@ const port = process.env.PORT || 3001;
 app.listen(port, () => {
   console.log(`Listening on port:${port}`);
 });
-

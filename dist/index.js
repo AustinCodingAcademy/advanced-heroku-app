@@ -28,25 +28,33 @@ var _ArticleRoutes = require("./routes/blog/ArticleRoutes");
 
 var _ArticleRoutes2 = _interopRequireDefault(_ArticleRoutes);
 
+var _CouponRoutes = require("./routes/CouponRoutes");
+
+var _CouponRoutes2 = _interopRequireDefault(_CouponRoutes);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // dotenv allows us to declare environment variables in a .env file, \
 // find out more here https://github.com/motdotla/dotenv
 require("dotenv").config();
 
+var cors = require('cors');
 
 _mongoose2.default.set("debug", true);
 _mongoose2.default.Promise = global.Promise;
-_mongoose2.default.connect("mongodb://jwoo:jwoo@ds151451.mlab.com:51451/aca-test");
+// mongoose.connect("mongodb://jwoo:jwoo@ds151451.mlab.com:51451/aca-test");
+// mongoose.connect("mongodb://localhost/bogobyzip");
+_mongoose2.default.connect("mongodb://gdevany:gdevany@ds133964.mlab.com:33964/bogobyzip");
 
 var app = (0, _express2.default)();
 app.use(_express2.default.static("public"));
+app.use(cors());
+app.options('*', cors());
 
-app.get("*", function (req, res, next) {
-  res.sendFile("public/index.html");
-});
 app.use(_bodyParser2.default.json());
+
 app.use(_AuthenticationRoutes2.default);
+app.use(_CouponRoutes2.default);
 
 var authStrategy = _passport2.default.authenticate("authStrategy", { session: false });
 app.use(authStrategy);
